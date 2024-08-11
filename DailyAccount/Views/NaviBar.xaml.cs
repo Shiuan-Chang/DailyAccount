@@ -14,27 +14,28 @@ public partial class NaviBar : ContentView
 
     private void CreateNavigationButtons()
     {
-        var pageTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(ContentPage)));
+        var pageTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(ContentPage))).ToList();
         int count = 0;
         foreach (var type in pageTypes)
         {
+            if (type.Name == "MainPage")
+                continue;
             count++;
             var titleAttribute = type.GetCustomAttribute<DisplayNameAttribute>();
-            string formTitle = titleAttribute?.DisplayName ?? "未命名";
+            string pageTitle = titleAttribute?.DisplayName ?? "未命名";
 
             var navButton = new Button
             {
-                Text = formTitle,
+                Text = pageTitle,
                 FontFamily = "Microsoft JhengHei",
                 FontSize = 12,
                 FontAttributes = FontAttributes.None
             };
 
-            string imagePath = $"Resources/Images/{type.Name}.png";
-            if (File.Exists(imagePath))
-            {
-                navButton.ImageSource = ImageSource.FromFile(imagePath);
-            }
+            string imagePath = $"{pageTitle}.png";
+
+            navButton.ImageSource = ImageSource.FromFile(imagePath);
+
 
             navButton.Clicked += (sender, e) => NavigateTo(type);
             ButtonContainer.Children.Add(navButton);

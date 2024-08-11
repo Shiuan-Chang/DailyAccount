@@ -4,7 +4,7 @@
     {
         int count = 0;
 
-        public MainPage(ContentPage contentPage)
+        public MainPage()
         {
             InitializeComponent();
         }
